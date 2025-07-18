@@ -32,7 +32,12 @@
 		<div id="sliderContainer">
 		  <label for="opacitySlider">图像透明度</label><br>
 		  <input type="range" id="opacitySlider" min="0" max="1" step="0.01" value="1">
-		</div>
+                <div id="infoPanel" style="width: 30%; height: 100%; float: right; border-left: 1px solid #ccc; padding: 10px; overflow: auto;">
+                  <h3>历史影像</h3>
+                  <div id="imageContainer">
+                    <p>点击地图查看图片</p>
+                  </div>
+	</div>
 		
 		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" type="text/javascript"></script>
 		<script src="https://unpkg.com/leaflet-textpath/leaflet.textpath.js"></script>
@@ -146,7 +151,17 @@
 								
 					    });
 						
-			
+			onEachFeature: function (feature, layer) {
+  layer.on('click', function(e) {
+    const name = feature.properties.NAME || '无名称';
+    const imagePath = `邮政局;景观 1950年代.jpg`;  // 自定义逻辑
+
+    document.getElementById('imageContainer').innerHTML = `
+      <h4>${name}</h4>
+      <img src="${imagePath}" alt="${name}" style="width: 100%;" />
+    `;
+  });
+}
 			
 			var imageBounds = [[23.348834, 116.659326], [23.370046, 116.689452]];
 			var imageOverlay = L.imageOverlay('image/1948_2.png', imageBounds).addTo(map);
