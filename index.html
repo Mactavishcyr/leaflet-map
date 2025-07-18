@@ -100,7 +100,7 @@
 			  'font-weight': 'bold',
 			};
 			
-			fetch('leaflet-map/Mroad_featuretojson714.geojson')
+			fetch('Mroad_featuretojson714.geojson')
 			  .then(response => response.json())
 			  .then(geojsonData => {
 			    geojsonLayer = L.geoJSON(geojsonData, {
