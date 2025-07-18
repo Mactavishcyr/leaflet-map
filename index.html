@@ -104,6 +104,11 @@
 			  'font-family': 'Microsoft YaHei, sans-serif',
 			  'font-weight': 'bold',
 			};
+
+			const imageMap = {
+                        '外马路': '邮政局;景观 1950年代.jpg',
+                        // 继续添加...
+                           };
 			
 			fetch('Mroad_featuretojson714.geojson')
 			  .then(response => response.json())
@@ -125,15 +130,20 @@
 					                      attributes: textStyle
 					                    });
 					                  }
-				      layer.on('click', function(e) {
-    const name = feature.properties.NAME || '无名称';
-    const imagePath = `邮政局;景观 1950年代.jpg`;  // 自定义逻辑
+				      layer.on('click', function () {
+            const name = feature.properties.NAME;
+            const imagePath = imageMap[name];
+            const imageContainer = document.getElementById('imageContainer');
 
-    document.getElementById('imageContainer').innerHTML = `
-      <h4>${name}</h4>
-      <img src="${imagePath}" alt="${name}" style="width: 100%;" />
-    `;
-  });
+            if (imagePath) {
+              imageContainer.innerHTML = `
+                <h4>${name}</h4>
+                <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
+              `;
+            } else {
+              imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
+            }
+          });
 					                }
 					            }).addTo(map);
 								
@@ -154,16 +164,21 @@
 					                      attributes: textStyle
 					                    });
 					                  }
-				      layer.on('click', function(e) {
-                                const name = feature.properties.NAME || '无名称';
-                                const imagePath = `邮政局;景观 1950年代.jpg`;  // 自定义逻辑
-                                document.getElementById('imageContainer').innerHTML = `
-                               <h4>${name}</h4>
-                               <img src="${imagePath}" alt="${name}" style="width: 100%;" />
-                                `;
-                                    });
-					                }
+				      layer.on('click', function () {
+            const name = feature.properties.NAME;
+            const imagePath = imageMap[name];
+            const imageContainer = document.getElementById('imageContainer');
 
+            if (imagePath) {
+              imageContainer.innerHTML = `
+                <h4>${name}</h4>
+                <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
+              `;
+            } else {
+              imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
+            }
+          });
+					                }
 					            }).addTo(map);
 								
 					    });
