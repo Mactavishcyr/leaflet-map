@@ -125,6 +125,15 @@
 					                      attributes: textStyle
 					                    });
 					                  }
+				      layer.on('click', function(e) {
+    const name = feature.properties.NAME || '无名称';
+    const imagePath = `邮政局;景观 1950年代.jpg`;  // 自定义逻辑
+
+    document.getElementById('imageContainer').innerHTML = `
+      <h4>${name}</h4>
+      <img src="${imagePath}" alt="${name}" style="width: 100%;" />
+    `;
+  });
 					                }
 					            }).addTo(map);
 								
@@ -145,23 +154,19 @@
 					                      attributes: textStyle
 					                    });
 					                  }
+				      layer.on('click', function(e) {
+                                const name = feature.properties.NAME || '无名称';
+                                const imagePath = `邮政局;景观 1950年代.jpg`;  // 自定义逻辑
+                                document.getElementById('imageContainer').innerHTML = `
+                               <h4>${name}</h4>
+                               <img src="${imagePath}" alt="${name}" style="width: 100%;" />
+                                `;
+                                    });
 					                }
 
 					            }).addTo(map);
 								
 					    });
-						
-			onEachFeature: function (feature, layer) {
-  layer.on('click', function(e) {
-    const name = feature.properties.NAME || '无名称';
-    const imagePath = `邮政局;景观 1950年代.jpg`;  // 自定义逻辑
-
-    document.getElementById('imageContainer').innerHTML = `
-      <h4>${name}</h4>
-      <img src="${imagePath}" alt="${name}" style="width: 100%;" />
-    `;
-  });
-}
 			
 			var imageBounds = [[23.348834, 116.659326], [23.370046, 116.689452]];
 			var imageOverlay = L.imageOverlay('image/1948_2.png', imageBounds).addTo(map);
