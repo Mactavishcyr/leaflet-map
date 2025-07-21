@@ -131,11 +131,6 @@
 					                      attributes: textStyle
 					                    });
 					                  }
-				      layer.on('click', function () {
-                 const name = feature.properties.NAME;
-            const imagePath = imageMap[name];
-            const imageContainer = document.getElementById('imageContainer');
-          });
 					                }
 					            }).addTo(map);
 								
@@ -156,11 +151,6 @@
 					                      attributes: textStyle
 					                    });
 					                  }
-				      layer.on('click', function () {
-            const name = feature.properties.NAME;
-            const imagePath = imageMap[name];
-            const imageContainer = document.getElementById('imageContainer');
-          });
 					                }
 					            }).addTo(map);
 								
@@ -174,7 +164,8 @@
                    const name = feature.properties.NAME;
                    const imagePath = imageMap[name];
                    const imageContainer = document.getElementById('imageContainer');
-					      if (imagePath) {
+					      
+		 if (imagePath) {
                    imageContainer.innerHTML = `
                 <h4>${name}</h4>
                 <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
@@ -196,10 +187,7 @@
 			      var value = parseFloat(this.value);
 			      imageOverlay.setOpacity(value);
 			    });
-				
-		</script>
-		
-		
+		</script>	
 	</body>
 </html>
 <html>
