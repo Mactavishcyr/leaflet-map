@@ -106,8 +106,9 @@
 			};
 
 			const imageMap = {
-                        '1': '邮政局;景观 1950年代.jpg',
-			'1': '邮政局1920-3-年代.jpg',
+                        '1': ['邮政局;景观 1950年代.jpg',
+			, '邮政局1920-3-年代.jpg'],
+		        '2': []
                         // 继续添加...
                            };
 			
@@ -163,20 +164,21 @@ fetch('viewpoint.geojson')
   .then(geojsonData => {
     L.geoJSON(geojsonData, {
       onEachFeature: function(feature, layer) {
-        layer.on('click', function() {
-          const name = feature.properties?.ID;
-          const imagePath = imageMap[name];
-          const imageContainer = document.getElementById('imageContainer');
+        layer.on('click', function () {
+  const name = feature.properties?.NAME;
+  const imagePaths = imageMap[name];
+  const imageContainer = document.getElementById('imageContainer');
 
-          if (imagePath) {
-            imageContainer.innerHTML = `
-              <h4>${name}</h4>
-              <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
-            `;
-          } else {
-            imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
-          }
-        });
+  if (imagePaths && imagePaths.length > 0) {
+    let html = `<h4>${name}</h4>`;
+    imagePaths.forEach(path => {
+      html += `<img src="${path}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain; margin-bottom:10px;" />`;
+    });
+    imageContainer.innerHTML = html;
+  } else {
+    imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
+  }
+});
       }
     }).addTo(map);
   });
