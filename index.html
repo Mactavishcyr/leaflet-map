@@ -106,7 +106,8 @@
 			};
 
 			const imageMap = {
-                        '外马路': '邮政局;景观 1950年代.jpg',
+                        '1': '邮政局;景观 1950年代.jpg',
+			'1': '邮政局1920-3-年代.jpg',
                         // 继续添加...
                            };
 			
@@ -131,18 +132,9 @@
 					                    });
 					                  }
 				      layer.on('click', function () {
-            const name = feature.properties.NAME;
+                 const name = feature.properties.NAME;
             const imagePath = imageMap[name];
             const imageContainer = document.getElementById('imageContainer');
-
-            if (imagePath) {
-              imageContainer.innerHTML = `
-                <h4>${name}</h4>
-                <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
-              `;
-            } else {
-              imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
-            }
           });
 					                }
 					            }).addTo(map);
@@ -168,9 +160,22 @@
             const name = feature.properties.NAME;
             const imagePath = imageMap[name];
             const imageContainer = document.getElementById('imageContainer');
-
-            if (imagePath) {
-              imageContainer.innerHTML = `
+          });
+					                }
+					            }).addTo(map);
+								
+                 fetch('viewpoint.geojson')
+			  .then(response => response.json())
+			  .then(geojsonData => {
+			    geojsonLayer =  L.geoJSON(geojsonData, {
+			      style: getFeatureStyle,
+			      onEachFeature: function(feature, layer)
+				      layer.on('click', function () {
+                   const name = feature.properties.NAME;
+                   const imagePath = imageMap[name];
+                   const imageContainer = document.getElementById('imageContainer');
+					      if (imagePath) {
+                   imageContainer.innerHTML = `
                 <h4>${name}</h4>
                 <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
               `;
@@ -182,6 +187,7 @@
 					            }).addTo(map);
 								
 					    });
+				  
 			
 			var imageBounds = [[23.348834, 116.659326], [23.370046, 116.689452]];
 			var imageOverlay = L.imageOverlay('image/1948_2.png', imageBounds).addTo(map);
