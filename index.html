@@ -164,7 +164,7 @@ fetch('viewpoint.geojson')
     L.geoJSON(geojsonData, {
       onEachFeature: function(feature, layer) {
         layer.on('click', function() {
-          const name = feature.properties?.NAME;
+          const name = feature.properties?.ID;
           const imagePath = imageMap[name];
           const imageContainer = document.getElementById('imageContainer');
 
