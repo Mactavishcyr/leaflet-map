@@ -112,82 +112,87 @@
                            };
 			
 			fetch('Mroad_featuretojson714.geojson')
-			  .then(response => response.json())
-			  .then(geojsonData => {
-			    geojsonLayer = L.geoJSON(geojsonData, {
-				  pane: 'roadPane',
-				  filter: f => f.properties.class === '已成马路',
-			      style: getFeatureStyle,
-			      onEachFeature: function(feature, layer){
-					   if (
-					   (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString') &&
-					   typeof layer.setText === 'function' &&
-					   feature.properties && feature.properties.NAME&&
-                           feature.properties.NAME.trim() !== '') {
-					                    layer.setText(feature.properties.NAME, {
-					                      repeat: false,
-					                      center: true,
-					                      orientation: 'against',
-					                      attributes: textStyle
-					                    });
-					                  }
-					                }
-					            }).addTo(map);
-								
-                  L.geoJSON(geojsonData, {
-				  pane: 'alleyPane',
-				  filter: f => f.properties.class === '巷',
-			      style: getFeatureStyle,
-			      onEachFeature: function(feature, layer){
-					   if (
-					   (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString') &&
-					   typeof layer.setText === 'function' &&
-					   feature.properties && feature.properties.NAME&&
-					       feature.properties.NAME.trim() !== '') {
-					                    layer.setText(feature.properties.NAME, {
-					                      repeat: false,
-					                      center: true,
-					                      orientation: 'against',
-					                      attributes: textStyle
-					                    });
-					                  }
-					                }
-					            }).addTo(map);
-								
-                 fetch('viewpoint.geojson')
-			  .then(response => response.json())
-			  .then(geojsonData => {
-			    geojsonLayer =  L.geoJSON(geojsonData, {
-			      style: getFeatureStyle,
-			      onEachFeature: function(feature, layer){
-				      layer.on('click', function () {
-                   const name = feature.properties.NAME;
-                   const imagePath = imageMap[name];
-                   const imageContainer = document.getElementById('imageContainer');
-					      
-		 if (imagePath) {
-                   imageContainer.innerHTML = `
-                <h4>${name}</h4>
-                <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
-              `;
-            } else {
-              imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
-            }
+  .then(response => response.json())
+  .then(geojsonData => {
+    // 加载马路图层
+    L.geoJSON(geojsonData, {
+      pane: 'roadPane',
+      filter: f => f.properties.class === '已成马路',
+      style: getFeatureStyle,
+      onEachFeature: function(feature, layer) {
+        if (
+          (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString') &&
+          typeof layer.setText === 'function' &&
+          feature.properties?.NAME?.trim() !== ''
+        ) {
+          layer.setText(feature.properties.NAME, {
+            repeat: false,
+            center: true,
+            orientation: 'against',
+            attributes: textStyle
           });
-					                }
-					            }).addTo(map);
+        }
+      }
+    }).addTo(map);
 
-				  });
-			var imageBounds = [[23.348834, 116.659326], [23.370046, 116.689452]];
-			var imageOverlay = L.imageOverlay('image/1948_2.png', imageBounds).addTo(map);
-			  map.fitBounds(imageBounds);
-			
-			var slider = document.getElementById('opacitySlider');
-			    slider.addEventListener('input', function() {
-			      var value = parseFloat(this.value);
-			      imageOverlay.setOpacity(value);
-			    });
-		</script>	
+    // 加载巷图层
+    L.geoJSON(geojsonData, {
+      pane: 'alleyPane',
+      filter: f => f.properties.class === '巷',
+      style: getFeatureStyle,
+      onEachFeature: function(feature, layer) {
+        if (
+          (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString') &&
+          typeof layer.setText === 'function' &&
+          feature.properties?.NAME?.trim() !== ''
+        ) {
+          layer.setText(feature.properties.NAME, {
+            repeat: false,
+            center: true,
+            orientation: 'against',
+            attributes: textStyle
+          });
+        }
+      }
+    }).addTo(map);
+  });
+
+// 加载点击展示图片图层
+fetch('viewpoint.geojson')
+  .then(response => response.json())
+  .then(geojsonData => {
+    L.geoJSON(geojsonData, {
+      onEachFeature: function(feature, layer) {
+        layer.on('click', function() {
+          const name = feature.properties?.NAME;
+          const imagePath = imageMap[name];
+          const imageContainer = document.getElementById('imageContainer');
+
+          if (imagePath) {
+            imageContainer.innerHTML = `
+              <h4>${name}</h4>
+              <img src="${imagePath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain;" />
+            `;
+          } else {
+            imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
+          }
+        });
+      }
+    }).addTo(map);
+  });
+
+// 加载底图图片叠加
+const imageBounds = [[23.348834, 116.659326], [23.370046, 116.689452]];
+const imageOverlay = L.imageOverlay('image/1948_2.png', imageBounds).addTo(map);
+map.fitBounds(imageBounds);
+
+// 透明度滑块控制
+const slider = document.getElementById('opacitySlider');
+slider.addEventListener('input', function() {
+  const value = parseFloat(this.value);
+  imageOverlay.setOpacity(value);
+});
+</script>	
 	</body>
 </html>
 <html>
