@@ -202,8 +202,14 @@
                 let html = `<button id="closeImageBtn">关闭</button>`;
                 html += `<h4>${name}</h4>`;
                 imagePaths.forEach(path => {
-                  html += `<img src="${path}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain; margin-bottom:10px;" />`;
-                });
+                  const fileName = path.split('/').pop(); // 提取文件名
+                 html += `
+                   <div style="margin-bottom: 15px;">
+                <img src="${path}" alt="${fileName}" style="width:100%; max-height:300px; object-fit:contain;" />
+                <div style="text-align:center; font-size:12px; color:#555; margin-top:5px;">${fileName}</div>
+                </div>
+                 `;
+             });
                 imageContainer.innerHTML = html;
 
                 document.getElementById('closeImageBtn').addEventListener('click', function () {
