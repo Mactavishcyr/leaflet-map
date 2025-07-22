@@ -213,7 +213,6 @@
 
               if (imagePaths && imagePaths.length > 0) {
                 let html = `<button id="closeImageBtn">关闭</button>`;
-                html += `<h4>${name}</h4>`;
                 imagePaths.forEach(path => {
                    const fileName = path.split('/').pop().replace(/\.\w+$/, ''); // 提取文件名
                  html += `
