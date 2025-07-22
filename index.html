@@ -34,7 +34,19 @@
 		  <input type="range" id="opacitySlider" min="0" max="1" step="0.01" value="1">
                 <div id="infoPanel" style="width: 30%; height: 100%; float: right; border-left: 1px solid #ccc; padding: 10px; overflow: auto;">
                   <h3>历史影像</h3>
-                  <div id="imageContainer" style="position:absolute; top:10px; right:10px; width:300px; background:white; padding:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;"></div>
+                  <div id="imageContainer" style="
+                         position: absolute;
+                         top: 10px;
+                         right: 10px;
+                         width: 300px;
+                        background: white;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 999;
+"></div>
+
 
                     <p>点击地图查看图片</p>
                   </div>
@@ -108,8 +120,11 @@
 
 			const imageMap = {
                         '1': ['邮政局;景观 1950年代.jpg',
-			, '邮政局1920-3-年代.jpg'],
-		        '2': []
+			 '邮政局1920-3-年代.jpg'],
+		        '2': ['民族路.jpg'],
+			'3': ['皇后酒楼旧址1990年代.jpg'],
+			'4': ['存心善堂.jpg'],
+			'5': ['天主教主教楼.jpg','法国天主教会.png']
                         // 继续添加...
                            };
 			
@@ -165,6 +180,26 @@ fetch('viewpoint.geojson')
   .then(geojsonData => {
     L.geoJSON(geojsonData, {
       onEachFeature: function(feature, layer) {
+// 鼠标移入时高亮
+  layer.on('mouseover', function () {
+    layer.setStyle({
+      color: 'orange',
+      weight: 6,
+      fillColor: 'yellow',
+      fillOpacity: 0.8
+    });
+    layer.bringToFront();
+  });
+
+// 鼠标移出时恢复原样
+  layer.on('mouseout', function () {
+    layer.setStyle({
+      color: '#3388ff',
+      weight: 3,
+      fillColor: '#3388ff',
+      fillOpacity: 0.5
+    });
+  });
         layer.on('click', function () {
   const name = feature.properties?.ID;
   const imagePaths = imageMap[name];
@@ -176,9 +211,12 @@ fetch('viewpoint.geojson')
       html += `<img src="${path}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain; margin-bottom:10px;" />`;
     });
     imageContainer.innerHTML = html;
+    document.getElementById('closeImageBtn').addEventListener('click', function () {
+      imageContainer.innerHTML = '';
+    });
   } else {
     imageContainer.innerHTML = `<p>暂无 ${name} 的图片</p>`;
-  }
+  }		
 });
       }
     }).addTo(map);
